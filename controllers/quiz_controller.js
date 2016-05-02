@@ -18,13 +18,28 @@ exports.load = function(req, res, next, quizId) {
 
 //GET /quizzes
 exports.index = function(req, res, next) {
-	models.Quiz.findAll()
+	var search = req.query.search || '';
+	if (search === '') {
+		models.Quiz.findAll()
 		.then(function(quizzes) {
 			res.render('quizzes/index.ejs', { quizzes: quizzes});
 		})
 		.catch(function(error) {
 			next(error);
 		});
+	} else {
+		search = "%"+search+"%";
+		search = search.replace(" ", "%");
+		models.Quiz.findAll({where: ["question like ?", search], order: ["question"]})
+		.then(function(quizzes) {			
+			res.render('quizzes/index.ejs', { quizzes: quizzes});
+		})
+		.catch(function(error) {
+			next(error);
+		});
+
+	}
+	
 };
 
 
