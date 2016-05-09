@@ -32,8 +32,8 @@ router.get('/users/:userId(\\d+)/edit', userController.edit);     // editar info
 router.put('/users/:userId(\\d+)',      userController.update);   // actualizar información de cuenta
 router.delete('/users/:userId(\\d+)',   userController.destroy);  // borrar cuenta 
 
-router.get('/quizzes',                     quizController.index);
-router.get('/quizzes/:quizId(\\d+)',       quizController.show);
+router.get('/quizzes.:format?',                     quizController.index);
+router.get('/quizzes/:quizId(\\d+).:format?',       quizController.show);
 router.get('/quizzes/:quizId(\\d+)/check', quizController.check);
 router.get('/quizzes/new',                 quizController.new);
 router.post('/quizzes',                    quizController.create);

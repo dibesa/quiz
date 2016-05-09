@@ -18,10 +18,15 @@ exports.load = function(req, res, next, quizId) {
 
 //GET /quizzes
 exports.index = function(req, res, next) {
+	var format = req.params.format || '';
 	var search = req.query.search || '';
 	if (search === '') {
 		models.Quiz.findAll()
 		.then(function(quizzes) {
+			if (format==="json") {
+				var json = JSON.stringify(quizzes);
+				res.send(json);
+			}
 			res.render('quizzes/index.ejs', { quizzes: quizzes});
 		})
 		.catch(function(error) {
@@ -45,7 +50,12 @@ exports.index = function(req, res, next) {
 
 // GET /quizzes/:id
 exports.show = function(req, res, next){
+	var format = req.params.format || '';
 	var answer = req.query.answer || '';
+	if (format==="json") {
+		var json = JSON.stringify(req.quiz);
+		res.send(json);
+	}
 	res.render('quizzes/show', {quiz: req.quiz,
 								answer: answer});
 };
