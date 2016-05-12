@@ -25,13 +25,18 @@ var authenticate = function(login, password) {
 
 // GET /session   -- Formulario de login
 exports.new = function(req, res, next) {
-    res.render('session/new');
+    var redir = req.query.redir || url.parse(req.headers.referer || "/").pathname;
+    // No volver al formulario de login ni al de registro.
+    if (redir === '/session' || redir === '/users/new') {
+        redir = "/";
+    }
+    res.render('session/new', {redir: redir});
 };
 
 
 // POST /session   -- Crear la sesion si usuario se autentica
 exports.create = function(req, res, next) {
-
+    var redir = req.body.redir || '/';
     var login     = req.body.login;
     var password  = req.body.password;
 
@@ -42,7 +47,7 @@ exports.create = function(req, res, next) {
     	        // La sesión se define por la existencia de: req.session.user
     	        req.session.user = {id:user.id, username:user.username};
 
-                res.redirect('/'); // redirección a redir
+                res.redirect(redir); // redirección a redir
             } else {
                 req.flash('error', 'La autenticación ha fallado. Reinténtelo otra vez.');
                 res.redirect("/session?redir="+redir);
