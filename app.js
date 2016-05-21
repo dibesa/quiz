@@ -49,6 +49,7 @@ app.use(function(req, res, next) {
 
    // Hacer visible req.session en las vistas
    res.locals.session = req.session;
+   
 
    next();
 });
@@ -59,7 +60,7 @@ app.use(function(req, res, next){
     next();
   } else {
     var f = new Date();
-    if (f.getTime()-req.session.user.f>10000) {
+    if (f.getTime()-req.session.user.f>180000) {
       delete req.session.user;    
       res.redirect("/session"); // redirect a login
     }

@@ -71,8 +71,14 @@ exports.show = function(req, res, next){
 		var json = JSON.stringify(req.quiz);
 		res.send(json);
 	}
-	res.render('quizzes/show', {quiz: req.quiz,
-								answer: answer});
+	models.User.findAll({order: ['username']})
+        .then(function(users) {        	
+            res.render('quizzes/show', {quiz: req.quiz,
+										users: users,															
+										answer: answer});
+        })
+        .catch(function(error) { next(error); });
+	
 };
 
 //GET /quizzes/:id/check
