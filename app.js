@@ -53,6 +53,21 @@ app.use(function(req, res, next) {
    next();
 });
 
+// Autologout
+app.use(function(req, res, next){
+  if (!req.session.user) {
+    next();
+  } else {
+    var f = new Date();
+    if (f.getTime()-req.session.user.f>10000) {
+      delete req.session.user;    
+      res.redirect("/session"); // redirect a login
+    }
+    req.session.user.f = f.getTime();
+    next();
+  }
+});
+
 
 app.use('/', routes);
 
